@@ -1,0 +1,51 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.history.mapper.HistoryMapper">
+
+	<select id="findCategoryExpend" resultType="com.ant.ttf.domain.history.dto.response.CategoryExpendsDTO">
+		SELECT user_id AS uPk, c.category_id AS cPk, name, img_url AS imgUrl, color, sum(price) AS price
+		FROM ttf.history h join ttf.categoryinfo c 
+		ON c.category_id = h.category_id
+		WHERE MONTH(pay_time) = MONTH(sysdate()) and price_ck = -1 and user_id=#{userPk}
+		GROUP BY c.category_id
+		ORDER BY price DESC;
+	</select>
+	
+	<select id="findTodayExpend" resultType="com.ant.ttf.domain.history.dto.response.TodayStateInfoDTO">
+		SELECT sum(price) as dayExpend
+		FROM ttf.history
+		WHERE user_id = #{userPk} AND price_ck = -1 AND date_format(pay_time, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+		GROUP BY date_format(pay_time, '%Y-%m-%d');
+	</select>
+	
+	<select id="findMonthExpend" parameterType="hashMap" resultType="double">
+		SELECT IFNULL(ROUND((SUM(price)/10000),1), 0)
+		FROM ttf.history
+		WHERE MONTH(pay_time) = #{month} AND price_ck=-1 AND YEAR(pay_time) = YEAR(sysdate()) AND user_id = #{userPk}
+		<if test="category != null">
+		AND category_id = #{category}
+		</if>
+	</select>
+	
+	<select id="findCafeExpendCount" resultType="int">
+		select COUNT(*)
+		from ttf.history
+		where MONTH(pay_time) in (MONTH(sysdate())-1,MONTH(sysdate())-2, MONTH(sysdate())-3) and category_id=2 AND user_id=#{userPk};
+	</select>
+	
+	<select id="top3List" resultType="Map">
+		SELECT detail, price
+		FROM ttf.history
+		WHERE user_id = #{userPk} and price_ck = -1 and substring(pay_time, 1, 7) = substring(now(), 1, 7)
+		order by price desc
+		limit 3
+	</select>
+	
+	<select id ="depleteBudget" resultType="int">
+		SELECT sum(h.price) / u.income * 100
+		FROM ttf.history h JOIN ttf.users u ON h.user_id = u.user_id
+		WHERE h.user_id=#{userPk} and substring(pay_time, 1, 7) = substring(now(), 1, 7) and price_ck = -1
+		
+	</select>
+</mapper>
+

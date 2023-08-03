@@ -120,49 +120,13 @@ class TtfApplicationTests {
 	
 	@Test
 	void testjim() {
-		List<LibTotalResDTO> dtoList = new ArrayList<>();
 		String userPK = "1";
-		List<Account> list = new ArrayList<>(); 
-		
-		
-		
-		
-		list = libMapper.listAcc(userPK); // 특정 유저에 속한 모든 계좌를 list로 받는다.
-		
-		for(Account userAcc : list) {
-			
-			LibTotalResDTO dto = new LibTotalResDTO();
-			
-			//빌더이용해서 dto에 필요한 정보 넣기(from account 테이블)
-			dto = userAcc.convertDTO(userAcc);
-			
-			
-			//bankinfo 테이블에서 은행이름과 이미지url 정보출력
-			String bankName = libMapper.nameImg(userAcc.getBankInfo()).getName();
-			
-			String urlinfo1 = libMapper.nameImg(userAcc.getBankInfo()).getImgUrl();
-			System.out.println("오류" + urlinfo1);
-			dto.setName(bankName); //dto에 은행이름 넣기
-			dto.setImgUrl(urlinfo1); // dto에 은행uri 넣기
-			
-			
-			
-			if(userAcc.getAccCk() == 0) { 
-				// 입출금계좌이면 dto의 monthBalance(한달사용지출액) = 유저의 월예산(유저테이블) - 통장잔고 (account테이블)
-				int monthIn = libMapper.monthIncome(userPK);
-				dto.setMonthBalance(monthIn - userAcc.getBalance()); // dto에 한달사용지출액 넣기
-				
-			} else if(userAcc.getAccCk() == 1) { //적금계좌일때
-				dto.setMonthBalance(0);
-			} else { // 신파일러 출금계좌일때, 한달사용금액 = balance - limitAmount
-				int Bala = ttfMapper.seeBalance(userAcc.getAccountId());
-				int limitAmo = ttfMapper.seeLimitAmount(userAcc.getAccountId());
-				dto.setMonthBalance(Bala - limitAmo);	
-			}
-			
-			dtoList.add(dto);	
-		}
-		
+		String bnpl = "10";
+		Map map = new HashMap();
+		map.put("userPK", userPK);
+		map.put("bnpl", bnpl);
+		int success = ttfMapper.updateBnpl(map);
+		System.out.println("성공이면 1이다 :" + success);
 		
 	}
 	

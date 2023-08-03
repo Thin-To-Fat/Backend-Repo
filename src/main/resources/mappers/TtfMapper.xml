@@ -40,5 +40,12 @@
 	WHERE account_id = #{account_id}
 	</select>
 	
+	<update id="updateBnpl" parameterType="java.util.Map">
+	UPDATE ttf.ttf
+	SET bnpl = #{bnpl}
+	WHERE user_id = #{userPK}
+	</update>
+	
+	
 	
 </mapper>

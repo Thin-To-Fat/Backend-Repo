@@ -49,5 +49,11 @@ public class ttfController {
 		
 	}
 	
+	@PutMapping("/dateofpay") //대금결제일 받는 API
+	public ResponseEntity<ResponseFormat<ResponseStatus>> ttfJoin(@RequestHeader("X-AUTH-TOKEN") String token, @RequestParam("bnpl") String bnpl) throws Exception{
+		ttfService.dateOfPay(token, bnpl);
+		ResponseFormat<ResponseStatus> responseFormat = new ResponseFormat<>(ResponseStatus.TTF_PUTDATEOFPAY_SUCCESS);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseFormat);
+	}  
 
 }

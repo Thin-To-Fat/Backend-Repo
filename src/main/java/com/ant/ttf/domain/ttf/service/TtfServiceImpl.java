@@ -57,4 +57,15 @@ public class TtfServiceImpl implements TtfService {
 			return true;
 		}
 	}
+	
+	@Override
+	public void dateOfPay(String token, String bnpl) throws Exception { // 앱 화면에서 대금납부일 받기
+		String userPK = jwtTokenProvider.getUserPk(token);
+		Map map = new HashMap();
+		map.put("userPK", userPK);
+		map.put("bnpl", bnpl);
+		int success = ttfMapper.updateBnpl(map);
+		log.info("성공? :"+ (Integer.toString(success)));
+		
+	}
 }

@@ -43,12 +43,9 @@ public class UsersController {
 	@Autowired
 	UsersMapper userMapper;
 	
-	
 	// 유저 회원가입 API
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseFormat<String>> createUser(UsersRequestDTO dto) throws Exception{
-	
-		// 서비스 호출
 		userMapper.userSignUp(dto);
 		ResponseFormat<String> responseFormat = new ResponseFormat<>(ResponseStatus.USER_POSTSIGNUP_SUCCESS);
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseFormat);
@@ -69,7 +66,7 @@ public class UsersController {
     	ResponseFormat<UserDashboardInfoDTO> responseFormat = new ResponseFormat<>(ResponseStatus.DASHBOARD_GET_USERINFO_SUCCESS, userInfo);
     	return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
     }
-    
+   
     // 대시보드 상단 월 예산 수정하는 API
     @PutMapping("/dashboard/income")
     public ResponseEntity<ResponseFormat<String>> updateIncome(@RequestHeader("X-AUTH-TOKEN") String token, int income) throws Exception{

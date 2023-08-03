@@ -1,5 +1,8 @@
 package com.ant.ttf.global;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 
 @Getter
@@ -10,6 +13,7 @@ public class ResponseFormat<T> {
     private final String message;
 
     private T result;
+    
 
     public ResponseFormat(ResponseStatus status) {
         this.code = status.getCode();
@@ -21,5 +25,6 @@ public class ResponseFormat<T> {
         this.message = status.getMessage();
         this.result = result;
     }
+    
     
 }

@@ -2,6 +2,7 @@ package com.ant.ttf.domain.history.service;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.ant.ttf.domain.history.dto.response.CategoryExpendsDTO;
+import com.ant.ttf.domain.history.dto.response.MonthlyPriceDTO;
 import com.ant.ttf.domain.history.dto.response.ThreeMonthInfoDTO;
 import com.ant.ttf.domain.history.dto.response.TodayStateInfoDTO;
 import com.ant.ttf.domain.history.dto.response.Top3MonthBudgetDTO;
@@ -120,6 +122,22 @@ public class HistoryServiceImpl implements HistoryService {
 		dto.setDepletedBudget(depletedBudget);
 		
 		return dto;
+	}
+	
+	// 매달 예상 고정 지출
+	@Override
+	public String fixedPrice(String token) {
+		String userPk = jwtTokenProvider.getUserPk(token);
+		Users userDto = userMapper.findUserInfoByPk(userPk);
+		String fixed = historyMapper.expectMonthlyFixedPrice(userPk);
+		return fixed;
+	}
+	
+	// 달별 올해 지출 기록 
+	public List<MonthlyPriceDTO> getMonPriceList(String token){
+		String userPk = jwtTokenProvider.getUserPk(token);
+		List<MonthlyPriceDTO> monPriceList = historyMapper.findMonthlyExpend(userPk);
+		return monPriceList;
 	}
 	
 }

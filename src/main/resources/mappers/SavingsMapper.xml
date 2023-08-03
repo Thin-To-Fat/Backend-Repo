@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.savings.mapper.SavingsMapper">
+	<select id="findBankInfo" resultType="map">
+		SELECT bank_info as bankPk, name, img_url as imgUrl, bank_class as bankClass
+		FROM ttf.bankinfo
+	</select>
+	
+	
+	<select id="findSavingsList" resultType="map" parameterType="map">
+		SELECT b.name as bName, s.name as sName, s.max_rate as maxRate, s.basic_rate as basicRate, s.link, s.join_money as joinMoney, s.join_who as joinWho, s.save_how as saveHow
+		FROM savings s JOIN bankinfo b
+		ON s.bank_id = b.bank_info
+		<where>
+			<if test ="searchName != null and searchName != ''">
+			AND (s.name LIKE CONCAT('%',#{searchName},'%') OR b.name LIKE CONCAT('%',#{searchName},'%'))
+			</if>
+			<if test ="bank_info != null and bank_info != ''">
+			AND b.bank_info IN (#{bank_info})
+			</if>
+		</where>
+		
+		<if test ="rateCk == null and rateCk == 1">
+		ORDER BY s.max_rate
+		</if>
+		<if test ="rateCk == 0">
+		ORDER BY s.basic_rate
+		</if>
+	</select>
+	
+</mapper>
+

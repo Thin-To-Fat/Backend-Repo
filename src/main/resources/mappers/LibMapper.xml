@@ -1,0 +1,35 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.library.mapper.LibMapper">
+		
+		<!-- <select id="seeAcc" parameterType="String" resultType="com.ant.ttf.domain.library.entity.Account">
+		SELECT acc_num, type, acc_ck, nickname, balance
+		FROM account
+		WHERE user_id = #{userPK}
+		</select> -->
+		
+		<select id="monthIncome" parameterType="String" resultType="Integer">
+		SELECT income
+		FROM users
+		WHERE user_id = #{userPK}
+		</select>
+		
+		<select id="nameImg" parameterType="Long" resultType="com.ant.ttf.domain.library.entity.BankInfo">
+		SELECT bank_info as bankId, name, img_url as imgUrl, bank_class as bankClass
+		FROM ttf.bankinfo
+		WHERE bank_info = #{bankInfo}
+		</select>
+		
+		<select id="listAcc" parameterType="String" resultType="com.ant.ttf.domain.library.entity.Account">
+		SELECT account_id as accountId, user_id as userId, bank_info as bankInfo, nickname, type, created_at as createdAt, acc_num as accNum, balance, acc_ck as accCk
+		FROM ttf.account
+		WHERE user_id = #{userPK}
+		</select>
+		
+		<update id="updateNickname" parameterType="com.ant.ttf.domain.library.dto.request.UpdateNicknameDTO">
+		UPDATE ttf.account
+		SET nickname = #{name}
+		WHERE account_id = #{accountPK}
+		</update>
+		
+</mapper>

@@ -27,9 +27,28 @@ public enum ResponseStatus {
 	// 수입/지출 내역
 	HISTORY_GET_FILTERELEMENT_SUCCESS("H007", "카테고리, 계좌 필터 요소 가져오기 성공"),
 	HISTORY_GET_FILTERDATA_SUCCESS("H008", "달, 카테고리, 은행 별 지출내역 가져오기 성공"),
-	HISTORY_GET_HISTORYINFO_SUCCESs("H009", "수입 / 지출 내역 상단 데이터 가져오기 성공");
+	HISTORY_GET_HISTORYINFO_SUCCESs("H009", "수입 / 지출 내역 상단 데이터 가져오기 성공"),
 	
+	// 신파일러 관련 API
+	TTF_POSTSIGNUP_SUCCESS("T001", "신파일러 적금 가입하기 성공"),
+	TTF_PUTPAY_SUCCESS("T002", "상품 결제 성공"),
+	TTF_PUTPAYSTOP_SUCCESS("T003", "한도 초과 결제 실패"),
 	
+	//라이브러리 관련 API
+	LIBRARY_GETALLACC_SUCCESS("L001", "라이브러리 전체 가져오기 성공"),
+	LIBRARY_UPDATE_SUCCESS("L002", "계좌 별 닉네임 수정 성공"),
+
+	// 은행 리스트 API
+	SAVINGS_GET_BANKINFO_SUCCESS("B001", "은행 리스트 가져오기 성공"),
+	
+	// 적금 상품 검색 조회 API
+	SAVING_GET_LIST_SUCCESS("S001", "적금 상품 정보 가져오기 성공"),
+	
+	HISTORY_GET_FILTERCATEGORYELEMENT_SUCCESS("H007", "필터 카테고리 내용 가져오기 성공"),
+	HISTORY_GET_FILTERACCOUNTELEMENT_SUCCESS("H008", "필터 계좌 내용 가져오기 성공"),
+	HISTORY_GET_HISTORYHEADINFO_SUCCESS("H010", "최고지출일,일평균지출,월별최고지출액, 월별최고수입액, 개인포인트 데이터 가져오기 성공"),
+	HISTORY_GET_HISTORYTAILINFO_SUCCESS("H011", "일일최고 수입, 일일최고 지출, 당월 일별 수입, 당월 일별 지출 데이터 가져오기 성공");
+
 	// 위와 유사하게 적어주세요
 	
 	private final String code;

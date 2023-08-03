@@ -1,0 +1,44 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.ttf.mapper.TtfMapper">
+	<select id="findAccountNum" parameterType="Long" resultType="String">
+		SELECT acc_num as accNum
+		FROM account
+		where account_id = #{accountId}
+	</select>
+	
+	<insert id="regTtf" parameterType="com.ant.ttf.domain.ttf.entity.Ttf">
+	INSERT INTO ttf.ttf(
+			user_id, account_id, start_date, end_date, acc_ck, account_num, cans
+		) VALUES ( 
+			#{userId}, #{accountId}, #{startDate}, #{endDate}, #{accCk}, #{accountNum}, 
+			#{cans}
+		)
+	</insert>
+	
+	<select id="seeLimit" parameterType="String" resultType="Integer">
+	SELECT limitAmount
+	FROM ttf.ttf
+	WHERE user_id=#{userPK}
+	</select>
+	
+	<update id="balUpdate" parameterType="java.util.Map">
+	UPDATE ttf.ttf
+	SET limitAmount = #{limitBalance}
+	WHERE user_id = #{userPK}
+	</update>
+	
+	<select id="seeBalance" parameterType="Long" resultType="Integer">
+	SELECT balance
+	FROM ttf.ttf
+	WHERE account_id = #{account_id}
+	</select>
+	
+	<select id="seeLimitAmount" parameterType="Long" resultType="Integer">
+	SELECT limitAmount
+	FROM ttf.ttf
+	WHERE account_id = #{account_id}
+	</select>
+	
+	
+</mapper>

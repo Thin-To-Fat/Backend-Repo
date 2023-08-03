@@ -35,7 +35,7 @@ public class Account {
 				.type(userAcc.getType())
 				.accCk(userAcc.getAccCk())
 				.nickname(userAcc.getNickname())
-				.balance(userAcc.getBalance())
+//				.balance(userAcc.getBalance())
 				.build();			
 	}
 	

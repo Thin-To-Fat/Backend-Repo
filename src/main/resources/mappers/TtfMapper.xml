@@ -16,6 +16,17 @@
 		)
 	</insert>
 	
+	<insert id="regAcc" parameterType="com.ant.ttf.domain.library.entity.Account">
+	INSERT INTO ttf.account(
+			user_id, bank_info, nickname, type, created_at, acc_num, balance, acc_ck
+		) VALUES ( 
+			#{userId}, #{bankInfo}, #{nickname}, #{type}, #{createdAt}, #{accNum}, 
+			#{balance}, #{accCk} 
+		)
+	</insert>
+	
+	
+	
 	<select id="seeLimit" parameterType="String" resultType="Integer">
 	SELECT limitAmount
 	FROM ttf.ttf
@@ -28,16 +39,16 @@
 	WHERE user_id = #{userPK}
 	</update>
 	
-	<select id="seeBalance" parameterType="Long" resultType="Integer">
+	<select id="seeBalance" parameterType="String" resultType="Integer">
 	SELECT balance
 	FROM ttf.ttf
-	WHERE account_id = #{account_id}
+	WHERE user_id = #{userPK}
 	</select>
 	
-	<select id="seeLimitAmount" parameterType="Long" resultType="Integer">
+	<select id="seeLimitAmount" parameterType="String" resultType="Integer">
 	SELECT limitAmount
 	FROM ttf.ttf
-	WHERE account_id = #{account_id}
+	WHERE user_id = #{userPK}
 	</select>
 	
 	<update id="updateBnpl" parameterType="java.util.Map">

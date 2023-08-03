@@ -49,13 +49,15 @@ public class LibServiceImpl implements LibService {
 			if(userAcc.getAccCk() == 0) { 
 				// 입출금계좌이면 dto의 monthBalance(한달사용지출액) = 유저의 월예산(유저테이블) - 통장잔고 (account테이블)
 				int monthIn = libMapper.monthIncome(userPK);
+				dto.setBalance(userAcc.getBalance());
 				dto.setMonthBalance(monthIn - userAcc.getBalance()); // dto에 한달사용지출액 넣기
 				
 			} else if(userAcc.getAccCk() == 1) { //적금계좌일때
 				dto.setMonthBalance(0);
 			} else { // 신파일러 출금계좌일때, 한달사용금액 = balance - limitAmount
-				int Bala = ttfMapper.seeBalance(userAcc.getAccountId());
-				int limitAmo = ttfMapper.seeLimitAmount(userAcc.getAccountId());
+				int Bala = ttfMapper.seeBalance(userPK);
+				int limitAmo = ttfMapper.seeLimitAmount(userPK);
+				dto.setBalance(Bala);
 				dto.setMonthBalance(Bala - limitAmo);	
 			}
 			

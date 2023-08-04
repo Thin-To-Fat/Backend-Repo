@@ -15,4 +15,5 @@ public interface UsersMapper {
     void userSignUp(UsersRequestDTO sigUpdto);
     void updateIncome(String userPk, int income);
     void updateGoalBudget(String userPk, int goalBudget);
+    String checkBnpl(String userPk);
 }

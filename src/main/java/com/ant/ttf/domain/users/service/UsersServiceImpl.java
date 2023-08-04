@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ant.ttf.domain.users.dto.request.UsersLoginReqDTO;
 import com.ant.ttf.domain.users.dto.request.UsersRequestDTO;
 import com.ant.ttf.domain.users.dto.response.UserDashboardInfoDTO;
+import com.ant.ttf.domain.users.dto.response.UsersLoginResponseDTO;
 import com.ant.ttf.domain.users.entity.Users;
 import com.ant.ttf.domain.users.mapper.UsersMapper;
 import com.ant.ttf.global.exception.LoginFailedException;
@@ -30,16 +31,25 @@ public class UsersServiceImpl implements UsersService {
 
 
     // 로그인 -> 이메일, 비밀번호 일치 시 토큰 발급
-    public String login(UsersLoginReqDTO loginDto) {
+    public UsersLoginResponseDTO login(UsersLoginReqDTO loginDto) {
     	Users userDto = userMapper.findUserByUserEmail(loginDto.getEmail())
                 .orElseThrow(() -> new LoginFailedException("잘못된 아이디입니다"));
+    	
+    	UsersLoginResponseDTO dto = new UsersLoginResponseDTO();
 
     	log.info(loginDto.getPassword()+ " "+ userDto.getPassword());
     	if (!loginDto.getPassword().equals(userDto.getPassword())) {	
             throw new LoginFailedException("잘못된 비밀번호입니다");
         }
 
-        return jwtTokenProvider.createToken(userDto.getUser_id(), Collections.singletonList(userDto.getRole()));
+        String token = jwtTokenProvider.createToken(userDto.getUser_id(), Collections.singletonList(userDto.getRole()));
+        
+        String userPk = jwtTokenProvider.getUserPk(token);
+        
+        dto.setBnplCk(userMapper.checkBnpl(userPk));
+        dto.setToken(token);
+        
+        return dto;
     }
     
    

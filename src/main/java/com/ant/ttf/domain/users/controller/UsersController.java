@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.ant.ttf.domain.users.dto.request.UsersLoginReqDTO;
 import com.ant.ttf.domain.users.dto.request.UsersRequestDTO;
 import com.ant.ttf.domain.users.dto.response.UserDashboardInfoDTO;
+import com.ant.ttf.domain.users.dto.response.UsersLoginResponseDTO;
 import com.ant.ttf.domain.users.entity.Users;
 import com.ant.ttf.domain.users.mapper.UsersMapper;
 import com.ant.ttf.domain.users.service.UsersService;
@@ -53,9 +55,9 @@ public class UsersController {
 	
 	// 유저 로그인 API
     @PostMapping("/login")
-    public ResponseEntity<ResponseFormat<String>> login(UsersLoginReqDTO dto) throws Exception{
-        String token = usersService.login(dto);
-		ResponseFormat<String> responseFormat = new ResponseFormat<>(ResponseStatus.USER_POSTLOGIN_SUCCESS, token);
+    public ResponseEntity<ResponseFormat<UsersLoginResponseDTO>> login(@RequestBody UsersLoginReqDTO dto) throws Exception{
+    	UsersLoginResponseDTO loginDto = usersService.login(dto);
+		ResponseFormat<UsersLoginResponseDTO> responseFormat = new ResponseFormat<>(ResponseStatus.USER_POSTLOGIN_SUCCESS, loginDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseFormat);
     }
     

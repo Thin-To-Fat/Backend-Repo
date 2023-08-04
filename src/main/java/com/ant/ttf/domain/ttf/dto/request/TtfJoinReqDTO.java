@@ -19,7 +19,7 @@ public class TtfJoinReqDTO {
 	private int cans;
 	
 	
-	public Ttf ttfForEntity(TtfJoinReqDTO dto, Long userPK2, String accNum) {
+	public Ttf ttfForEntity(TtfJoinReqDTO dto, Long userPK2, String newAccNo) {
 		//현재시간을 문자열로 변환
 		//이 값을 시작날짜에 대입
 		LocalDateTime time = LocalDateTime.now();
@@ -35,7 +35,8 @@ public class TtfJoinReqDTO {
 				.startDate(isTime)
 				.endDate(endDate)
 				.accCk(1)
-				.accountNum(accNum)
+				.balance(0)
+				.accountNum(newAccNo)
 				.cans(dto.getCans())
 				.build();				
 	}

@@ -58,6 +58,7 @@ public class LibServiceImpl implements LibService {
 				
 			} else if(userAcc.getAccCk() == 1) { //적금계좌일때
 				dto.setMonthBalance(0);
+				dto.setBalance(userAcc.getBalance());
 			} else { // 신파일러 출금계좌일때, 한달사용금액 = balance - limitAmount
 				int Bala = ttfMapper.seeBalance(userPK);
 				int limitAmo = ttfMapper.seeLimitAmount(userPK);

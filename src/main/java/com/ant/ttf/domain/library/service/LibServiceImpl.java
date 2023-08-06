@@ -40,6 +40,10 @@ public class LibServiceImpl implements LibService {
 			//빌더이용해서 dto에 필요한 정보 넣기(from account 테이블)
 			dto = userAcc.convertDTO(userAcc);
 			
+			//계좌번호 뒤에서부터 딱 4개만 가져오기
+			String splitAccNo = dto.getAccNum().substring(dto.getAccNum().length()-4, dto.getAccNum().length());
+			dto.setAccNum(splitAccNo);
+			
 			//bankinfo 테이블에서 은행이름과 이미지url 정보출력
 			String bankName = libMapper.nameImg(userAcc.getBankInfo()).getName();
 			String urlinfo = libMapper.nameImg(userAcc.getBankInfo()).getImgUrl();

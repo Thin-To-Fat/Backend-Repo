@@ -34,7 +34,7 @@
 	
 	<select id="checkBnpl" resultType="String">
 		SELECT bnpl
-		FROM users
+		FROM ttf
 		WHERE user_id=#{userId}
 	</select>
 	

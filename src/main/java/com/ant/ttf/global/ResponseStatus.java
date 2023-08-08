@@ -34,6 +34,7 @@ public enum ResponseStatus {
 	TTF_PUTPAY_SUCCESS("T002", "상품 결제 성공"),
 	TTF_PUTPAYSTOP_SUCCESS("T003", "한도 초과 결제 실패"),
 	TTF_PUTDATEOFPAY_SUCCESS("T004", "대금 납부일 받기 성공"),
+	TTF_QRINFO_SUCCESS("T005", "QR 화면 정보 가져오기 성공"),
 	
 	//라이브러리 관련 API
 	LIBRARY_GETALLACC_SUCCESS("L001", "라이브러리 전체 가져오기 성공"),

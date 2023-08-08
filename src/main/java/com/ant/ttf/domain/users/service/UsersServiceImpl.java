@@ -47,6 +47,8 @@ public class UsersServiceImpl implements UsersService {
         String userPk = jwtTokenProvider.getUserPk(token);
         
         dto.setBnplCk(userMapper.checkBnpl(userPk));
+        System.out.println("ck " + userMapper.checkBnpl(userPk));
+        
         dto.setToken(token);
         
         return dto;

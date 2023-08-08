@@ -26,7 +26,6 @@
 	</insert>
 	
 	
-	
 	<select id="seeLimit" parameterType="String" resultType="Integer">
 	SELECT limitAmount
 	FROM ttf.ttf
@@ -56,6 +55,12 @@
 	SET bnpl = #{bnpl}
 	WHERE user_id = #{userPK}
 	</update>
+	
+	<select id="qrInfo" resultType="Map">
+		SELECT balance, limitAmount, CONCAT("신한 ", SUBSTR(account_num, -4)) accountNum
+		FROM ttf.ttf
+		WHERE user_id = #{userPk}
+	</select>
 	
 	
 	

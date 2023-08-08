@@ -25,4 +25,6 @@ public interface TtfMapper {
 	
 	int updateBnpl(Map map); // 대금결제일 db에 삽입
 	
+	Map qrInfo(String userPk);
+	
 }

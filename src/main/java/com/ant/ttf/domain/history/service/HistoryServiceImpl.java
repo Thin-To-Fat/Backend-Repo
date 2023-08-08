@@ -51,7 +51,7 @@ public class HistoryServiceImpl implements HistoryService {
         int daysOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         int standard = Math.round(goal/daysOfMonth);
-        
+        today.setGoalExpend(standard);
         if(today.getDayExpend()<= (standard/2)) {
         	today.setDayState("여유");
         } else if(today.getDayExpend()<=standard) {
@@ -59,6 +59,7 @@ public class HistoryServiceImpl implements HistoryService {
         } else {
         	today.setDayState("위험");
         }
+        
 		return today;
 	}
 	

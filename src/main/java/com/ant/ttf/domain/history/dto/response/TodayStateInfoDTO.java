@@ -13,5 +13,5 @@ import lombok.Setter;
 public class TodayStateInfoDTO {
 	private String dayState;
 	private int dayExpend;
-
+	private int goalExpend;
 }

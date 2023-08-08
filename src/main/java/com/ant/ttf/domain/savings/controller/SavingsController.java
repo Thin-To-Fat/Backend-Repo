@@ -36,15 +36,6 @@ public class SavingsController {
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
 
-//	// 은행 리스트 불러오는 API
-//	@GetMapping("/savings/bankInfo")
-//	public ResponseEntity<ResponseFormat<List<BankInfoDTO>>> bankinfo() throws Exception{
-//		List<BankInfoDTO> bank = savingsService.getBankInfoList();
-//		List<Map<String, Object>> bankEle = savingsMapper.findBankInfo();
-//		ResponseFormat<List<BankInfoDTO>> responseFormat = new ResponseFormat<>(ResponseStatus.SAVINGS_GET_BANKINFO_SUCCESS, bank);
-//		return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
-//	}
-	
 	// 은행 리스트 불러오는 API
 	@GetMapping("/bankInfo")
 	public ResponseEntity<ResponseFormat<List<Map>>> bankinfo() throws Exception{

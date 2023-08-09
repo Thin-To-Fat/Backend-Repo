@@ -67,15 +67,16 @@
        b.name AS category,
        b.img_url AS categoryImg,
        a.detail,
-       a.price,
+       (a.price*a.price_ck) AS price,
        c.bank_info
 		FROM ttf.history a
 		JOIN ttf.categoryinfo b ON a.category_id = b.category_id
 		JOIN ttf.account c ON a.account_id = c.account_id
 		WHERE a.user_id = #{userPk}
 		AND DATE_FORMAT(a.pay_time, "%Y/%m") = #{date}
-		<if test = "category != null">And b.category_id = #{category}</if>
-		<if test = "bank != null">And c.bank_info = #{bank}</if>
+		<if test = "category != null">And b.category_id in (${category})</if>
+		<if test = "bank != null">And c.bank_info in (${bank})</if>
+		order by date desc, time
 		
 
 	</select>
@@ -94,7 +95,7 @@
 		(SELECT price monthIncome FROM ttf.history where date_format(pay_time,"%Y-%m") = #{nowdate} and price_ck = 1 AND user_id = #{userPk}) a
 		inner join
 		(
-		SELECT sum(price*price_ck)*-1 monthChange FROM ttf.history where date_format(pay_time,"%Y-%m") = "2023-07" and price_ck = -1) b on 1=1;
+		SELECT sum(price*price_ck)*-1 monthChange FROM ttf.history where date_format(pay_time,"%Y-%m") = #{nowdate} and price_ck = -1) b on 1=1;
 	</select>
 	<select id="findUserDailyOut" resultType="Map">
 		SELECT cast(date_format(pay_time, "%d")as unsigned) dailyoutdate, sum(price*price_ck)*-1 dailyout FROM ttf.history where user_id = #{userPk} and price_ck = -1 and date_format(pay_time, "%Y-%m") = #{nowdate} group by date_format(pay_time, "%Y-%m-%d");

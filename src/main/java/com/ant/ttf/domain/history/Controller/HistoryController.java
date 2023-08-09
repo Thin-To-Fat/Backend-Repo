@@ -114,10 +114,11 @@ public class HistoryController {
 	@GetMapping("/userAllAccountInfo")
 	public ResponseEntity<ResponseFormat<List<Map>>> getUserAllAccountInfo(@RequestHeader("X-AUTH-TOKEN") String token, @RequestParam Map alllist) throws Exception{
 		
-		
+		System.out.println(alllist);
 		String userPk = jwtTokenProvider.getUserPk(token);
 
 		alllist.put("userPk",userPk);
+
 		List<Map> acctinfo = histoyMapper.findUserAllAccountAll(alllist);
 		ResponseFormat<List<Map>> responseFormat = new ResponseFormat<>(ResponseStatus.HISTORY_GET_FILTERDATA_SUCCESS, acctinfo);
 		

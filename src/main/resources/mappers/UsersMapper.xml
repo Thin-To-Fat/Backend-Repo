@@ -37,6 +37,22 @@
 		FROM ttf
 		WHERE user_id=#{userId}
 	</select>
+	<select id="getUserTitle" resultType="com.ant.ttf.domain.users.dto.response.UserTitleResponseDTO">
+		SELECT *
+		FROM ttf.titleinfo
+		WHERE grade = #{grade}
+		ORDER BY rand()
+		LIMIT 1;
+	</select>
+	
+	<update id ="updateUserTitle">
+		UPDATE ttf.users SET nickname = #{nickname}, point = point-1000 WHERE user_id = #{userPk}
+	</update>
+	
+	<update id ="userAttend">
+		UPDATE users SET point = point + 100 WHERE user_id = #{userPk}
+	</update>
+	
 	
 </mapper>
 

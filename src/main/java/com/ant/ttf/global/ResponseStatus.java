@@ -15,7 +15,8 @@ public enum ResponseStatus {
 	DASHBOARD_GET_USERINFO_SUCCESS("U002", "대시보드 상단 유저 정보 가져오기 성공"),
 	DASHBOARD_PUT_USERINCOME_SUCCESS("U003", "유저 월 예산 수정 성공"),
 	DASHBOARD_PUT_USERBUDGET_SUCCESS("U004", "유저 월 목표금액 수정 성공"),
-	
+	ATTEND_PUT_POINTUP_SUCCESS("U006", "출석체크 성공"),
+	GOTCHA_GET_USERTITLE_SUCCESS("U007", "칭호뽑기 성공"),
 	// 지출내역 관련 API
 	DASHBOARD_GET_HISTORYFIXED_SUCCESS("H001", "예상 고정 지출 금액 받아오기 성공"),
 	DASHBOARD_GET_HISTORYCATEGORY_SUCCESS("H002", "이번달 카테고리별 지출금 받아오기 성공"),
@@ -35,7 +36,7 @@ public enum ResponseStatus {
 	TTF_PUTPAYSTOP_SUCCESS("T003", "한도 초과 결제 실패"),
 	TTF_PUTDATEOFPAY_SUCCESS("T004", "대금 납부일 받기 성공"),
 	TTF_QRINFO_SUCCESS("T005", "QR 화면 정보 가져오기 성공"),
-	
+	TTF_REGISTCHECK_SUCCESS("T006", "ttf 적금 가능여부 확인 성공"),
 	//라이브러리 관련 API
 	LIBRARY_GETALLACC_SUCCESS("L001", "라이브러리 전체 가져오기 성공"),
 	LIBRARY_UPDATE_SUCCESS("L002", "계좌 별 닉네임 수정 성공"),

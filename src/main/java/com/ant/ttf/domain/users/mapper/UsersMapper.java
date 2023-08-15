@@ -3,8 +3,9 @@ package com.ant.ttf.domain.users.mapper;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import com.ant.ttf.domain.users.dto.request.UsersRequestDTO;
-import com.ant.ttf.domain.users.dto.response.UserDashboardInfoDTO;
+import com.ant.ttf.domain.users.dto.response.UserTitleResponseDTO;
 import com.ant.ttf.domain.users.entity.Users;
 
 @Mapper
@@ -16,4 +17,7 @@ public interface UsersMapper {
     void updateIncome(String userPk, int income);
     void updateGoalBudget(String userPk, int goalBudget);
     String checkBnpl(String userPk);
+    UserTitleResponseDTO getUserTitle(String grade);
+    void updateUserTitle(String userPk, String nickname);
+    void userAttend(String userPk);
 }

@@ -27,4 +27,6 @@ public interface TtfMapper {
 	
 	Map qrInfo(String userPk);
 	
+	Integer registCheck(String userPk);
+	
 }

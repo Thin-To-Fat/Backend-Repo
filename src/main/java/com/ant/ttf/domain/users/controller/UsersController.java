@@ -2,25 +2,24 @@ package com.ant.ttf.domain.users.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ant.ttf.domain.users.dto.request.UsersLoginReqDTO;
 import com.ant.ttf.domain.users.dto.request.UsersRequestDTO;
 import com.ant.ttf.domain.users.dto.response.UserDashboardInfoDTO;
+import com.ant.ttf.domain.users.dto.response.UserTitleResponseDTO;
 import com.ant.ttf.domain.users.dto.response.UsersLoginResponseDTO;
-import com.ant.ttf.domain.users.entity.Users;
 import com.ant.ttf.domain.users.mapper.UsersMapper;
 import com.ant.ttf.domain.users.service.UsersService;
 import com.ant.ttf.global.ResponseFormat;
@@ -86,6 +85,23 @@ public class UsersController {
     	String userPk = jwtTokenProvider.getUserPk(token);
     	userMapper.updateGoalBudget(userPk, goalBudget);
     	ResponseFormat<String> responseFormat = new ResponseFormat<>(ResponseStatus.DASHBOARD_PUT_USERBUDGET_SUCCESS);
+    	return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
+    }
+    
+    // 가챠 API
+    @GetMapping("/nickname")
+    public ResponseEntity<ResponseFormat<UserTitleResponseDTO>> userTitlegotcha(@RequestHeader("X-AUTH-TOKEN") String token) throws Exception{
+    	UserTitleResponseDTO titleInfo = usersService.userTitleGotcha(token);
+    	ResponseFormat<UserTitleResponseDTO> responseFormat = new ResponseFormat<>(ResponseStatus.GOTCHA_GET_USERTITLE_SUCCESS, titleInfo);
+    	return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
+    }
+    
+    // 출석체크 API
+    @PutMapping("/attend")
+    public ResponseEntity<ResponseFormat<String>> userAttendance(@RequestHeader("X-AUTH-TOKEN") String token) throws Exception{
+    	String userPk = jwtTokenProvider.getUserPk(token);
+    	userMapper.userAttend(userPk);
+    	ResponseFormat<String> responseFormat = new ResponseFormat<>(ResponseStatus.ATTEND_PUT_POINTUP_SUCCESS);
     	return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
     }
    

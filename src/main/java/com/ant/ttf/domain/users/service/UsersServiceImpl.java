@@ -1,15 +1,14 @@
 package com.ant.ttf.domain.users.service;
 
 import java.util.Collections;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ant.ttf.domain.users.dto.request.UsersLoginReqDTO;
-import com.ant.ttf.domain.users.dto.request.UsersRequestDTO;
 import com.ant.ttf.domain.users.dto.response.UserDashboardInfoDTO;
+import com.ant.ttf.domain.users.dto.response.UserTitleResponseDTO;
 import com.ant.ttf.domain.users.dto.response.UsersLoginResponseDTO;
 import com.ant.ttf.domain.users.entity.Users;
 import com.ant.ttf.domain.users.mapper.UsersMapper;
@@ -72,6 +71,32 @@ public class UsersServiceImpl implements UsersService {
 		dto.setPoint(user.getPoint());
 		dto.setNickname(user.getNickname());
 		return dto;
+	}
+	
+	@Override
+	public UserTitleResponseDTO userTitleGotcha(String token) {
+	//		S : 1% A : 9% B:20% C:30% D:40%	
+		String grade="";
+		int randNum = (int) (Math.random() * 100);
+		if (randNum == 0) {
+			grade = "S";
+		} else if(randNum< 10) {
+			grade = "A";
+		} else if(randNum < 30) {
+			grade = "B";
+		} else if(randNum < 60) {
+			grade = "C";
+		} else {
+			grade = "D";
+		}
+			
+		UserTitleResponseDTO newTitle = userMapper.getUserTitle(grade);
+		
+		
+		String userPk = jwtTokenProvider.getUserPk(token);
+		userMapper.updateUserTitle(userPk, newTitle.getName());
+		
+		return newTitle;
 	}
 
 }

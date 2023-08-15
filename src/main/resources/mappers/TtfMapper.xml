@@ -62,6 +62,10 @@
 		WHERE user_id = #{userPk}
 	</select>
 	
+	<select id="registCheck" resultType="Integer">
+		SELECT count(*) FROM ttf.ttf
+		WHERE user_id = #{userPk}
+	</select>
 	
 	
 </mapper>

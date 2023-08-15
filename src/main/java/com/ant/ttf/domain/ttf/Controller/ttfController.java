@@ -78,5 +78,12 @@ public class ttfController {
 		ResponseFormat<Map> responseFormat = new ResponseFormat<>(ResponseStatus.TTF_QRINFO_SUCCESS, result);
 		return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
 	}
+	@GetMapping("/registCheck")
+	public ResponseEntity<ResponseFormat<Integer>> registCheck(@RequestHeader("X-AUTH-TOKEN") String token) throws Exception{
+		String userPk = jwtTokenProvider.getUserPk(token);
+		Integer result = ttfMapper.registCheck(userPk);
+		ResponseFormat<Integer> responseFormat = new ResponseFormat<>(ResponseStatus.TTF_REGISTCHECK_SUCCESS, result);
+		return ResponseEntity.status(HttpStatus.OK).body(responseFormat);
+	}
 
 }

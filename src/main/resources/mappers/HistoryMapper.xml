@@ -62,13 +62,15 @@
 	</select>
 	
 	<select id="findUserAllAccountAll" parameterType="Map" resultType="Map">
-		SELECT DATE_FORMAT(a.pay_time, "%m/%d") AS date,
-       DATE_FORMAT(a.pay_time, "%H:%i") AS time,
-       b.name AS category,
-       b.img_url AS categoryImg,
-       a.detail,
-       (a.price*a.price_ck) AS price,
-       c.bank_info
+		
+		select * , e.img_url bankurl from
+		(SELECT DATE_FORMAT(a.pay_time, "%m/%d") AS date,
+        DATE_FORMAT(a.pay_time, "%H:%i") AS time,
+        b.name AS category,
+        b.img_url AS categoryImg,
+        a.detail,
+        (a.price*a.price_ck) AS price,
+        c.bank_info
 		FROM ttf.history a
 		JOIN ttf.categoryinfo b ON a.category_id = b.category_id
 		JOIN ttf.account c ON a.account_id = c.account_id
@@ -76,7 +78,8 @@
 		AND DATE_FORMAT(a.pay_time, "%Y/%m") = #{date}
 		<if test = "category != null">And b.category_id in (${category})</if>
 		<if test = "bank != null">And c.bank_info in (${bank})</if>
-		order by date desc, time
+		order by date desc, time) d, ttf.bankinfo e
+		where d.bank_info = e.bank_info
 		
 
 	</select>

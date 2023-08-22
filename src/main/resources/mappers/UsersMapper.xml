@@ -1,0 +1,58 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.users.mapper.UsersMapper">
+	<select id="findUserByUserEmail" resultType="com.ant.ttf.domain.users.entity.Users">
+		SELECT user_id, email, name, password, role
+		FROM users
+		WHERE email=#{email}
+	</select>
+	
+	<select id="findByUserId" resultType="com.ant.ttf.domain.users.entity.Users">
+		SELECT user_id, name, password, role
+		FROM users
+		WHERE user_id=#{userId}
+	</select>
+	
+	<select id="findUserInfoByPk" resultType="com.ant.ttf.domain.users.entity.Users">
+		SELECT name, goal_budget, income, point, nickname, role
+		FROM users
+		WHERE user_id = #{userPk}
+	</select>
+	
+	<insert id="userSignUp" parameterType="com.ant.ttf.domain.users.dto.request.UsersRequestDTO">
+		INSERT INTO users(email, password, name, birth, role, created_at, bnpl)
+		VALUES (#{email}, #{password}, #{name}, #{birth}, "ROLE_USER", now(), 0)
+	</insert>
+	
+	<update id ="updateIncome">
+		UPDATE users SET income = #{income} WHERE user_id = #{userPk}
+	</update>
+	
+	<update id ="updateGoalBudget">
+		UPDATE users SET goal_budget = #{goalBudget} WHERE user_id = #{userPk}
+	</update>
+	
+	<select id="checkBnpl" resultType="String">
+		SELECT bnpl
+		FROM ttf
+		WHERE user_id=#{userId}
+	</select>
+	<select id="getUserTitle" resultType="com.ant.ttf.domain.users.dto.response.UserTitleResponseDTO">
+		SELECT *
+		FROM ttf.titleinfo
+		WHERE grade = #{grade}
+		ORDER BY rand()
+		LIMIT 1;
+	</select>
+	
+	<update id ="updateUserTitle">
+		UPDATE ttf.users SET nickname = #{nickname}, point = point-1000 WHERE user_id = #{userPk}
+	</update>
+	
+	<update id ="userAttend">
+		UPDATE users SET point = point + 100 WHERE user_id = #{userPk}
+	</update>
+	
+	
+</mapper>
+

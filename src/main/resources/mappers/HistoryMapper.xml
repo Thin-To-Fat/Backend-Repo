@@ -1,0 +1,125 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.history.mapper.HistoryMapper">
+
+	<select id="findCategoryExpend" resultType="com.ant.ttf.domain.history.dto.response.CategoryExpendsDTO">
+		SELECT user_id AS uPk, c.category_id AS cPk, name, img_url AS imgUrl, color, sum(price) AS price
+		FROM ttf.history h join ttf.categoryinfo c 
+		ON c.category_id = h.category_id
+		WHERE MONTH(pay_time) = MONTH(sysdate()) and price_ck = -1 and user_id=#{userPk}
+		GROUP BY c.category_id
+		ORDER BY price DESC;
+	</select>
+	
+	<select id="findTodayExpend" resultType="com.ant.ttf.domain.history.dto.response.TodayStateInfoDTO">
+		SELECT sum(price) as dayExpend
+		FROM ttf.history
+		WHERE user_id = #{userPk} AND price_ck = -1 AND date_format(pay_time, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+		GROUP BY date_format(pay_time, '%Y-%m-%d');
+	</select>
+	
+	<select id="expectMonthlyFixedPrice" resultType="String">
+		SELECT round(avg(total_price), 0) as average_price
+		FROM (
+			SELECT sum(price) as total_price
+			FROM ttf.history
+			WHERE price_ck = -1 AND fixed = 1 AND pay_time >= DATE_SUB(LAST_DAY(NOW()), INTERVAL 2 MONTH) AND pay_time  <![CDATA[<]]> DATE_SUB(LAST_DAY(NOW()), INTERVAL 1 MONTH)  		
+			GROUP BY user_id = #{userPk}
+			) as subquery;	
+	</select>
+	
+	<select id="findMonthlyExpend" resultType="com.ant.ttf.domain.history.dto.response.MonthlyPriceDTO">
+		SELECT MONTH(pay_time) as month, sum(price) as expend
+		FROM ttf.history
+		WHERE price_ck = -1 AND YEAR(pay_time) = YEAR(sysdate()) AND user_id=#{userPk}
+		GROUP BY MONTH(pay_time)
+		ORDER BY month;
+	</select>
+
+	<select id="findMonthExpend" parameterType="hashMap" resultType="double">
+		SELECT IFNULL(ROUND((SUM(price)/10000),1), 0)
+		FROM ttf.history
+		WHERE MONTH(pay_time) = #{month} AND price_ck=-1 AND YEAR(pay_time) = YEAR(sysdate()) AND user_id = #{userPk}
+		<if test="category != null">
+		AND category_id = #{category}
+		</if>
+	</select>
+	
+	<select id="findCafeExpendCount" resultType="int">
+		select COUNT(*)
+		from ttf.history
+		where MONTH(pay_time) in (MONTH(sysdate())-1,MONTH(sysdate())-2, MONTH(sysdate())-3) and category_id=2 AND user_id=#{userPk};
+	</select>
+	
+	<select id="findCategoryAll" resultType="Map">
+		select name name, img_url imgUrl, category_id categoryPk
+		from ttf.categoryinfo
+	</select>
+	
+	<select id="findUserAccountAll" resultType="Map">
+		SELECT concat(b.name,"(",right(replace(a.acc_num,'-',''),4),")") accountName, a.account_id accountPk  
+		FROM ttf.account a, ttf.bankinfo b where a.bank_info = b.bank_info AND a.user_id = #{userPk};
+	</select>
+	
+	<select id="findUserAllAccountAll" parameterType="Map" resultType="Map">
+		
+		select * , e.img_url bankurl from
+		(SELECT DATE_FORMAT(a.pay_time, "%m/%d") AS date,
+        DATE_FORMAT(a.pay_time, "%H:%i") AS time,
+        b.name AS category,
+        b.img_url AS categoryImg,
+        a.detail,
+        (a.price*a.price_ck) AS price,
+        c.bank_info
+		FROM ttf.history a
+		JOIN ttf.categoryinfo b ON a.category_id = b.category_id
+		JOIN ttf.account c ON a.account_id = c.account_id
+		WHERE a.user_id = #{userPk}
+		AND DATE_FORMAT(a.pay_time, "%Y/%m") = #{date}
+		<if test = "category != null">And b.category_id in (${category})</if>
+		<if test = "bank != null">And c.bank_info in (${bank})</if>
+		order by date desc, time) d, ttf.bankinfo e
+		where d.bank_info = e.bank_info
+		
+
+	</select>
+	<select id="findUserAcctStatistic" resultType="Map">
+		select a.monthIncome, b.monthChange,
+		(SELECT date_format(pay_time,"%d") date  FROM ttf.history where user_id = #{userPk} and date_format(pay_time,"%Y-%m") = #{nowdate}
+		 group by date_format(pay_time,"%Y-%m-%d") 
+		 order by sum(price*price_ck) limit 1) maxDay,
+		 (SELECT point FROM ttf.users where user_id = #{userPk}) point,
+		 (select round(sum(sm)/count(*))*-1
+		from 
+		(SELECT date_format(pay_time,"%Y-%m-%d") dt, sum(price*price_ck) sm  FROM ttf.history where user_id = #{userPk} and date_format(pay_time,"%Y-%m") = #{nowdate}  and price_ck=-1
+		 group by date_format(pay_time,"%Y-%m-%d") 
+		) d) dayChangeAvg
+		from
+		(SELECT price monthIncome FROM ttf.history where date_format(pay_time,"%Y-%m") = #{nowdate} and price_ck = 1 AND user_id = #{userPk}) a
+		inner join
+		(
+		SELECT sum(price*price_ck)*-1 monthChange FROM ttf.history where date_format(pay_time,"%Y-%m") = #{nowdate} and price_ck = -1) b on 1=1;
+	</select>
+	<select id="findUserDailyOut" resultType="Map">
+		SELECT cast(date_format(pay_time, "%d")as unsigned) dailyoutdate, sum(price*price_ck)*-1 dailyout FROM ttf.history where user_id = #{userPk} and price_ck = -1 and date_format(pay_time, "%Y-%m") = #{nowdate} group by date_format(pay_time, "%Y-%m-%d");
+	</select>
+		<select id="findUserDailyIn" resultType="Map">
+		SELECT cast(date_format(pay_time, "%d") as unsigned) dailyindate, sum(price*price_ck) dailyin FROM ttf.history where user_id = #{userPk} and price_ck = 1 and date_format(pay_time, "%Y-%m") = #{nowdate} group by date_format(pay_time, "%Y-%m-%d");
+	</select>
+	
+	<select id="top3List" resultType="Map">
+		SELECT detail, price
+		FROM ttf.history
+		WHERE user_id = #{userPk} and price_ck = -1 and substring(pay_time, 1, 7) = substring(now(), 1, 7)
+		order by price desc
+		limit 3
+	</select>
+	
+	<select id ="depleteBudget" resultType="int">
+		SELECT sum(h.price) / u.income * 100
+		FROM ttf.history h JOIN ttf.users u ON h.user_id = u.user_id
+		WHERE h.user_id=#{userPk} and substring(pay_time, 1, 7) = substring(now(), 1, 7) and price_ck = -1
+		
+	</select>
+</mapper>
+

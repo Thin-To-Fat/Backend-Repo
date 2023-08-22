@@ -1,0 +1,71 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ant.ttf.domain.ttf.mapper.TtfMapper">
+	<select id="findAccountNum" parameterType="Long" resultType="String">
+		SELECT acc_num as accNum
+		FROM account
+		where account_id = #{accountId}
+	</select>
+	
+	<insert id="regTtf" parameterType="com.ant.ttf.domain.ttf.entity.Ttf">
+	INSERT INTO ttf.ttf(
+			user_id, account_id, start_date, end_date, acc_ck, account_num, cans
+		) VALUES ( 
+			#{userId}, #{accountId}, #{startDate}, #{endDate}, #{accCk}, #{accountNum}, 
+			#{cans}
+		)
+	</insert>
+	
+	<insert id="regAcc" parameterType="com.ant.ttf.domain.library.entity.Account">
+	INSERT INTO ttf.account(
+			user_id, bank_info, nickname, type, created_at, acc_num, balance, acc_ck
+		) VALUES ( 
+			#{userId}, #{bankInfo}, #{nickname}, #{type}, #{createdAt}, #{accNum}, 
+			#{balance}, #{accCk} 
+		)
+	</insert>
+	
+	
+	<select id="seeLimit" parameterType="String" resultType="Integer">
+	SELECT limitAmount
+	FROM ttf.ttf
+	WHERE user_id=#{userPK}
+	</select>
+	
+	<update id="balUpdate" parameterType="java.util.Map">
+	UPDATE ttf.ttf
+	SET limitAmount = #{limitBalance}
+	WHERE user_id = #{userPK}
+	</update>
+	
+	<select id="seeBalance" parameterType="String" resultType="Integer">
+	SELECT balance
+	FROM ttf.ttf
+	WHERE user_id = #{userPK}
+	</select>
+	
+	<select id="seeLimitAmount" parameterType="String" resultType="Integer">
+	SELECT limitAmount
+	FROM ttf.ttf
+	WHERE user_id = #{userPK}
+	</select>
+	
+	<update id="updateBnpl" parameterType="java.util.Map">
+	UPDATE ttf.ttf
+	SET bnpl = #{bnpl}
+	WHERE user_id = #{userPK}
+	</update>
+	
+	<select id="qrInfo" resultType="Map">
+		SELECT balance, limitAmount, CONCAT("신한 ", SUBSTR(account_num, -4)) accountNum
+		FROM ttf.ttf
+		WHERE user_id = #{userPk}
+	</select>
+	
+	<select id="registCheck" resultType="Integer">
+		SELECT count(*) FROM ttf.ttf
+		WHERE user_id = #{userPk}
+	</select>
+	
+	
+</mapper>
